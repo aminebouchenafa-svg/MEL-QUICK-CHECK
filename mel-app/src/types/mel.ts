@@ -3,7 +3,6 @@ export interface MelItem {
   ata: string;
   ata_title: string;
   title: string;
-  subtitle: string;
   category: string;
   installed: string;
   required: string;
