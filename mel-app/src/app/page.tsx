@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { melData, ATA_NEON, searchItems } from "@/lib/data";
 import ItemCard from "@/components/ItemCard";
+import HelpModal from "@/components/HelpModal";
 import { MelItem } from "@/types/mel";
 
 const ataCounts: Record<string, number> = {};
@@ -48,6 +49,7 @@ export default function HomePage() {
                 {melData.operator} · B737 NG · {melData.revision} · {melData.revision_date}
               </p>
             </div>
+            <HelpModal />
           </div>
 
           {/* Search bar */}
