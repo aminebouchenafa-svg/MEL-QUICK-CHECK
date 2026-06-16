@@ -1,0 +1,52 @@
+name: Deploy MEL Quick Check to GitHub Pages
+
+on:
+  push:
+    branches: [main, claude/mel-technical-log-app-ykssk7]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mel-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: mel-app
+
+      - name: Build
+        run: npm run build
+        working-directory: mel-app
+        env:
+          NEXT_PUBLIC_BASE_PATH: /MEL-QUICK-CHECK
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: mel-app/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v4
+      - id: deployment
+        uses: actions/deploy-pages@v4
