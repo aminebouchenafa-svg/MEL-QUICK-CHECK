@@ -23,6 +23,12 @@ export default function AtaClient({
     return searchItems(items, query);
   }, [items, query]);
 
+  const exactMatch = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return null;
+    return displayed.find((item) => item.number.toLowerCase() === q) ?? null;
+  }, [displayed, query]);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -114,7 +120,12 @@ export default function AtaClient({
         ) : (
           <div className="space-y-2">
             {displayed.map((item) => (
-              <ItemCard key={item.number + item.title} item={item} query={query} />
+              <ItemCard
+                key={item.number + item.title}
+                item={item}
+                query={query}
+                autoOpen={exactMatch?.number === item.number}
+              />
             ))}
           </div>
         )}
