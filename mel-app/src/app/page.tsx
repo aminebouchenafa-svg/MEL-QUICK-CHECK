@@ -23,6 +23,12 @@ export default function HomePage() {
     return searchItems(melData.items, query).slice(0, 80);
   }, [query]);
 
+  const exactMatch = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return null;
+    return searchResults.find((item) => item.number.toLowerCase() === q) ?? null;
+  }, [searchResults, query]);
+
   const isSearching = query.trim().length > 0;
 
   return (
@@ -92,7 +98,12 @@ export default function HomePage() {
             ) : (
               <div className="space-y-2">
                 {searchResults.map((item) => (
-                  <ItemCard key={item.number} item={item} query={query} />
+                  <ItemCard
+                    key={item.number}
+                    item={item}
+                    query={query}
+                    autoOpen={exactMatch?.number === item.number}
+                  />
                 ))}
               </div>
             )}

@@ -13,12 +13,16 @@ function hl(text: string, query: string): string {
 export default function ItemCard({
   item,
   query = "",
+  autoOpen = false,
 }: {
   item: MelItem;
   query?: string;
+  autoOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"O" | "M" | null>(null);
+  const [open, setOpen] = useState(autoOpen);
+  const [activeTab, setActiveTab] = useState<"O" | "M" | null>(
+    autoOpen ? (item.procedures.includes("O") || item.operations ? "O" : item.procedures.includes("M") || item.maintenance ? "M" : null) : null
+  );
 
   const cat = CATEGORY_INFO[item.category];
   const hasO = item.procedures.includes("O") || !!item.operations;
